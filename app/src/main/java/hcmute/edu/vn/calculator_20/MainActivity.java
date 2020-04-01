@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setVal2();
-
                 if (sign == "+")
                 {
                     val1 = val1 + val2;
