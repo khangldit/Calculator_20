@@ -87,7 +87,12 @@ public class MainActivity extends AppCompatActivity {
         btnPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString() +".");
+                if(txtMainCal.getText().toString()=="")
+                    txtMainCal.setText(txtMainCal.getText().toString() +"0.");
+                else
+                    txtMainCal.setText(txtMainCal.getText().toString() +".");
+                setupButtonPoint();
+
             }
         });
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 sign="+";
                 val1 = Double.parseDouble(txtMainCal.getText().toString());
                 txtMainCal.setText("");
+                setupButtonPoint();
             }
         });
         btnSub.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 sign="-";
                 val1 = Double.parseDouble(txtMainCal.getText().toString());
                 txtMainCal.setText("");
+                setupButtonPoint();
             }
         });
         btnMul.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 sign="*";
                 val1 = Double.parseDouble(txtMainCal.getText().toString());
                 txtMainCal.setText("");
+                setupButtonPoint();
             }
         });
         btnDiv.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +128,13 @@ public class MainActivity extends AppCompatActivity {
                 sign="/";
                 val1 = Double.parseDouble(txtMainCal.getText().toString());
                 txtMainCal.setText("");
+                setupButtonPoint();
             }
         });
         btnEqual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setVal2();
+                val2=Double.parseDouble(txtMainCal.getText().toString());
                 if (sign == "+")
                 {
                     val1 = val1 + val2;
@@ -158,12 +167,10 @@ public class MainActivity extends AppCompatActivity {
                 val1=0;
                 val2=0;
                 txtMainCal.setText("");
+                setupButtonPoint();
             }
         });
     }
-
-
-
     private void setupButton()
     {
         btnZero =(Button) findViewById(R.id.btn0);
@@ -185,11 +192,15 @@ public class MainActivity extends AppCompatActivity {
         btnReset =(Button) findViewById(R.id.btnReset);
         txtMainCal =(TextView) findViewById(R.id.txtMainCal);
     }
-    private  void setVal2(){
-        String s=txtMainCal.getText().toString();
-        if(s==".")
-            val2=0;
+    private void setupButtonPoint()
+    {
+        String s = txtMainCal.getText().toString();
+        if(s.contains(".")){
+            btnPoint.setEnabled(false);
+        }
         else
-            val2=Double.parseDouble(s);
+            btnPoint.setEnabled(true);
+
     }
+
 }
