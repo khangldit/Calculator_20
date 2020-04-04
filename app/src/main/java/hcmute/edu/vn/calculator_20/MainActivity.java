@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnZero, btnOne,btnTwo,btnThree,btnFour,btnFive,btnSix,btnSeven,btnEight,btnNine;
     private Button btnAdd,btnSub,btnMul,btnDiv,btnEqual;
@@ -24,152 +24,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupButton();
-        btnZero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"0");
-            }
-        });
-        btnOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"1");
-            }
-        });
-        btnTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"2");
-            }
-        });
-        btnThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"3");
-            }
-        });
-        btnFour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"4");
-            }
-        });
-        btnFive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"5");
-            }
-        });
-        btnSix.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"6");
-            }
-        });
-        btnSeven.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"7");
-            }
-        });
-        btnEight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"8");
-            }
-        });
-        btnNine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                txtMainCal.setText(txtMainCal.getText().toString()+"9");
-            }
-        });
-        btnPoint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(txtMainCal.getText().toString()=="")
-                    txtMainCal.setText(txtMainCal.getText().toString() +"0.");
-                else
-                    txtMainCal.setText(txtMainCal.getText().toString() +".");
-                setupButtonPoint();
+        btnZero.setOnClickListener(this);
+        btnOne.setOnClickListener(this);
+        btnTwo.setOnClickListener(this);
+        btnThree.setOnClickListener(this);
+        btnFour.setOnClickListener(this);
+        btnFive.setOnClickListener(this);
+        btnSix.setOnClickListener(this);
+        btnSeven.setOnClickListener(this);
+        btnEight.setOnClickListener(this);
+        btnNine.setOnClickListener(this);
+        btnPoint.setOnClickListener(this);
+        btnAdd.setOnClickListener(this);
+        btnSub.setOnClickListener(this);
+        btnMul.setOnClickListener(this);
+        btnDiv.setOnClickListener(this);
+        btnEqual.setOnClickListener(this);
+        btnReset.setOnClickListener(this);
 
-            }
-        });
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sign="+";
-                val1 = Double.parseDouble(txtMainCal.getText().toString());
-                txtMainCal.setText("");
-                setupButtonPoint();
-            }
-        });
-        btnSub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sign="-";
-                val1 = Double.parseDouble(txtMainCal.getText().toString());
-                txtMainCal.setText("");
-                setupButtonPoint();
-            }
-        });
-        btnMul.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sign="*";
-                val1 = Double.parseDouble(txtMainCal.getText().toString());
-                txtMainCal.setText("");
-                setupButtonPoint();
-            }
-        });
-        btnDiv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sign="/";
-                val1 = Double.parseDouble(txtMainCal.getText().toString());
-                txtMainCal.setText("");
-                setupButtonPoint();
-            }
-        });
-        btnEqual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                val2=Double.parseDouble(txtMainCal.getText().toString());
-                if (sign == "+")
-                {
-                    val1 = val1 + val2;
-                    txtMainCal.setText(String.valueOf(val1));
-                }
-                else if (sign == "-")
-                {
-                    val1 = val1 - val2;
-                    txtMainCal.setText(String.valueOf(val1));
-                }
-                else if (sign == "*")
-                {
-                    val1 = val1 * val2;
-                    txtMainCal.setText(String.valueOf(val1));
-                }
-                else
-                {
-                    if(val2==0)
-                       Toast.makeText(MainActivity.this, "Can not divide by Zero",Toast.LENGTH_SHORT).show();
-                    else {
-                        val1 = val1 / val2;
-                        txtMainCal.setText(String.valueOf(val1));
-                    }
-                }
-            }
-        });
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                val1=0;
-                val2=0;
-                txtMainCal.setText("");
-                setupButtonPoint();
-            }
-        });
     }
     private void setupButton()
     {
@@ -203,4 +75,103 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn0:
+                txtMainCal.setText(txtMainCal.getText().toString()+"0");
+                break;
+            case R.id.btn1:
+                txtMainCal.setText(txtMainCal.getText().toString()+"1");
+                break;
+            case R.id.btn2:
+                txtMainCal.setText(txtMainCal.getText().toString()+"2");
+                break;
+            case R.id.btn3:
+                txtMainCal.setText(txtMainCal.getText().toString()+"3");
+                break;
+            case R.id.btn4:
+                txtMainCal.setText(txtMainCal.getText().toString()+"4");
+                break;
+            case R.id.btn5:
+                txtMainCal.setText(txtMainCal.getText().toString()+"5");
+                break;
+            case R.id.btn6:
+                txtMainCal.setText(txtMainCal.getText().toString()+"6");
+                break;
+            case R.id.btn7:
+                txtMainCal.setText(txtMainCal.getText().toString()+"7");
+                break;
+            case R.id.btn8:
+                txtMainCal.setText(txtMainCal.getText().toString()+"8");
+                break;
+            case R.id.btn9:
+                txtMainCal.setText(txtMainCal.getText().toString()+"9");
+                break;
+            case R.id.btnPoint:
+                if(txtMainCal.getText().toString()=="")
+                    txtMainCal.setText(txtMainCal.getText().toString() +"0.");
+                else
+                    txtMainCal.setText(txtMainCal.getText().toString() +".");
+                setupButtonPoint();
+                break;
+            case R.id.btnAdd:
+                sign="+";
+                val1 = Double.parseDouble(txtMainCal.getText().toString());
+                txtMainCal.setText("");
+                setupButtonPoint();
+                break;
+            case R.id.btnSub:
+                sign="-";
+                val1 = Double.parseDouble(txtMainCal.getText().toString());
+                txtMainCal.setText("");
+                setupButtonPoint();
+                break;
+            case R.id.btnMul:
+                sign="*";
+                val1 = Double.parseDouble(txtMainCal.getText().toString());
+                txtMainCal.setText("");
+                setupButtonPoint();
+                break;
+            case R.id.btnDiv:
+                sign="/";
+                val1 = Double.parseDouble(txtMainCal.getText().toString());
+                txtMainCal.setText("");
+                setupButtonPoint();
+                break;
+            case R.id.btnEqual:
+                val2=Double.parseDouble(txtMainCal.getText().toString());
+                if (sign == "+")
+                {
+                    val1 = val1 + val2;
+                    txtMainCal.setText(String.valueOf(val1));
+                }
+                else if (sign == "-")
+                {
+                    val1 = val1 - val2;
+                    txtMainCal.setText(String.valueOf(val1));
+                }
+                else if (sign == "*")
+                {
+                    val1 = val1 * val2;
+                    txtMainCal.setText(String.valueOf(val1));
+                }
+                else
+                {
+                    if(val2==0)
+                        Toast.makeText(MainActivity.this, "Can not divide by Zero",Toast.LENGTH_SHORT).show();
+                    else {
+                        val1 = val1 / val2;
+                        txtMainCal.setText(String.valueOf(val1));
+                    }
+                }
+                break;
+            case R.id.btnReset:
+                val1=0;
+                val2=0;
+                txtMainCal.setText("");
+                setupButtonPoint();
+                break;
+        }
+    }
 }
