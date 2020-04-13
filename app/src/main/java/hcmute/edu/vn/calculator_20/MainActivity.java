@@ -8,42 +8,38 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.nio.DoubleBuffer;
+import java.text.DecimalFormat;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button btnZero, btnOne,btnTwo,btnThree,btnFour,btnFive,btnSix,btnSeven,btnEight,btnNine;
-    private Button btnAdd,btnSub,btnMul,btnDiv,btnEqual;
-    private Button btnPoint,btnReset;
-    private TextView txtMainCal;
-    private String sign="" ;
-    private boolean flagEquals =false;
+    private Button btnZero, btnOne,btnTwo,btnThree,btnFour,btnFive,btnSix,btnSeven,btnEight,btnNine,btnAdd,btnSub,btnMul,btnDiv,btnEqual,btnPoint,btnClear;
 
-    private  double val1;
-    private double val2;
+    private TextView txtMainCal, txtLog;
+    private String sign;
+    private boolean flagEquals;
+    private boolean flagPoint;
+
+    private  double num1;
+    private double num2;
+    private double rs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupButton();
-        btnZero.setOnClickListener(this);
-        btnOne.setOnClickListener(this);
-        btnTwo.setOnClickListener(this);
-        btnThree.setOnClickListener(this);
-        btnFour.setOnClickListener(this);
-        btnFive.setOnClickListener(this);
-        btnSix.setOnClickListener(this);
-        btnSeven.setOnClickListener(this);
-        btnEight.setOnClickListener(this);
-        btnNine.setOnClickListener(this);
-        btnPoint.setOnClickListener(this);
-        btnAdd.setOnClickListener(this);
-        btnSub.setOnClickListener(this);
-        btnMul.setOnClickListener(this);
-        btnDiv.setOnClickListener(this);
-        btnEqual.setOnClickListener(this);
-        btnReset.setOnClickListener(this);
+        initValue();
+    }
 
-
+    private void initValue() {
+        num1 = Double.NaN;
+        num2= Double.NaN;
+        rs= Double.NaN;
+        flagEquals =false;
+        flagPoint =false;
+        sign="";
+        txtMainCal.setText("");
     }
     private void setupButton()
     {
@@ -63,184 +59,96 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnDiv =(Button) findViewById(R.id.btnDiv);
         btnEqual =(Button) findViewById(R.id.btnEqual);
         btnPoint =(Button) findViewById(R.id.btnPoint);
-        btnReset =(Button) findViewById(R.id.btnReset);
+        btnClear =(Button) findViewById(R.id.btnClear);
         txtMainCal =(TextView) findViewById(R.id.txtMainCal);
-    }
-    private void setupButtonPoint()
-    {
-        String s = txtMainCal.getText().toString();
-        if(s.contains(".")){
-            btnPoint.setEnabled(false);
-        }
-        else
-            btnPoint.setEnabled(true);
+//        txtLog =(TextView) findViewById(R.id.txtLog);
 
+        btnZero.setOnClickListener(this);
+        btnOne.setOnClickListener(this);
+        btnTwo.setOnClickListener(this);
+        btnThree.setOnClickListener(this);
+        btnFour.setOnClickListener(this);
+        btnFive.setOnClickListener(this);
+        btnSix.setOnClickListener(this);
+        btnSeven.setOnClickListener(this);
+        btnEight.setOnClickListener(this);
+        btnNine.setOnClickListener(this);
+        btnPoint.setOnClickListener(this);
+        btnAdd.setOnClickListener(this);
+        btnSub.setOnClickListener(this);
+        btnMul.setOnClickListener(this);
+        btnDiv.setOnClickListener(this);
+        btnEqual.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View v) {
-        try{
-            switch (v.getId()){
-                case R.id.btn0:
-                    if(flagEquals)
-                        txtMainCal.setText("0");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString() + "0");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn1:
-                    if(flagEquals)
-                        txtMainCal.setText("1");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"1");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn2:
-                    if(flagEquals)
-                        txtMainCal.setText("2");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"2");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn3:
-                    if(flagEquals)
-                        txtMainCal.setText("3");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"3");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn4:
-                    if(flagEquals)
-                        txtMainCal.setText(txtMainCal.getText().toString()+"4");
-                    else
-                        txtMainCal.setText("4");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn5:
-                    if(flagEquals)
-                        txtMainCal.setText("5");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"5");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn6:
-                    if(flagEquals)
-                        txtMainCal.setText("6");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"6");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn7:
-                    if(flagEquals)
-                        txtMainCal.setText("7");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"7");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn8:
-                    if(flagEquals)
-                        txtMainCal.setText("8");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"8");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btn9:
-                    if(flagEquals)
-                        txtMainCal.setText("9");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString()+"9");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btnPoint:
-                    if(txtMainCal.getText().toString()=="")
-                        txtMainCal.setText(txtMainCal.getText().toString() +"0.");
-                    else
-                        txtMainCal.setText(txtMainCal.getText().toString() +".");
-                    setupButtonPoint();
-                    flagEquals=false;
-                    break;
-                case R.id.btnAdd:
-                    sign="+";
-                    val1 = Double.parseDouble(txtMainCal.getText().toString());
-                    txtMainCal.setText("");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btnSub:
-                    sign="-";
-                    val1 = Double.parseDouble(txtMainCal.getText().toString());
-                    txtMainCal.setText("");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btnMul:
-                    sign="*";
-                    val1 = Double.parseDouble(txtMainCal.getText().toString());
-                    txtMainCal.setText("");
-                    setupButtonPoint();
-                    flagEquals=false;
-                    break;
-                case R.id.btnDiv:
-                    sign="/";
-                    val1 = Double.parseDouble(txtMainCal.getText().toString());
-                    txtMainCal.setText("");
-                    flagEquals=false;
-                    setupButtonPoint();
-                    break;
-                case R.id.btnEqual:
-                    val2=Double.parseDouble(txtMainCal.getText().toString());
-                    if (sign == "+")
-                    {
-                        val1 = val1 + val2;
-                        txtMainCal.setText(String.valueOf(val1));
-                    }
-                    else if (sign == "-")
-                    {
-                        val1 = val1 - val2;
-                        txtMainCal.setText(String.valueOf(val1));
-                    }
-                    else if (sign == "*")
-                    {
-                        val1 = val1 * val2;
-                        txtMainCal.setText(String.valueOf(val1));
-                    }
-                    else if(sign=="")
-                    {
-                        val1 = Double.parseDouble(txtMainCal.getText().toString());
-                    }
-                    else
-                    {
-                        if(val2==0)
-                            Toast.makeText(MainActivity.this, "Can not divide by Zero",Toast.LENGTH_SHORT).show();
-                        else {
-                            val1 = val1 / val2;
-                            txtMainCal.setText(String.valueOf(val1));
-                        }
-                    }
-                    flagEquals =true;
-                    setupButtonPoint();
-                    sign="";
-                    break;
-                case R.id.btnReset:
-                    val1=0;
-                    val2=0;
-                    sign="";
-                    txtMainCal.setText("");
-                    setupButtonPoint();
-                    break;
+        Button btn = (Button)v;
+        if (btn.getText().equals("=")){
+            if (sign.equals("")){
+                rs = Double.parseDouble(txtMainCal.getText().toString().trim());
+            }else {
+                num2 = Double.parseDouble(txtMainCal.getText().toString().trim());
+                if (sign.equals("+")){
+                    rs = num1+num2;
+                }else
+                if (sign.equals("-")){
+                    rs = num1-num2;
+                }else
+                if (sign.equals("*")){
+                    rs = num1*num2;
+                }else
+                if (sign.equals("/")){
+                    rs = num1/num2;
+                }
+
             }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+            txtMainCal.setText(new DecimalFormat("##.###").format(rs));
+            sign="";
+            flagEquals = true;
+        }else
+        if (btn.getText().equals(".")) {
+            if (!txtMainCal.getText().toString().contains(".")){
+                if (flagEquals)
+                    initValue();
+                txtMainCal.setText(txtMainCal.getText()+btn.getText().toString().trim());
+            }
+        }else
+        if (btn.getText().equals("C")){
+            initValue();
+        }else
+        if (btn.getText().equals("+")||
+                btn.getText().equals("-")||
+                btn.getText().equals("*")||
+                btn.getText().equals("/")){
+            if (flagEquals){
+                num1 = rs;
+                num2 = Double.NaN;
+                rs = Double.NaN;
+                sign = btn.getText().toString().trim();
+                txtMainCal.setText("");
+                flagEquals = false;
+            }else
+                if (txtMainCal.getText() !=""){
+                    if (sign == ""){
+                    num1 = Double.parseDouble(txtMainCal.getText().toString().trim());
+                    num2 = Double.NaN;
+                    sign = btn.getText().toString().trim();
+                    txtMainCal.setText("");
+                    }else{
+                        btnEqual.performClick();
+                        sign = btn.getText().toString().trim();
+                    }
+                }
+                else
+                    if(num1 != Double.NaN){
+                        sign = btn.getText().toString().trim();
+                    }
         }
+        else{
+            if (flagEquals)
+                initValue();
+            txtMainCal.setText(txtMainCal.getText()+btn.getText().toString().trim());
+        } /////// number
     }
 }

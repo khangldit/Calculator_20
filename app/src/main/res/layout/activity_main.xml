@@ -41,6 +41,7 @@
                     android:gravity="right"
                     android:padding="10dp"
                     android:textColor="#FFF" />
+
             </LinearLayout>
         </TableRow>
         <!-- Row for 7, 8, 9, /-->
@@ -269,7 +270,7 @@
                 <!-- Huynh Ngoc Hung Thinh -->
                 <!-- 14h00 29/03/2020-->
                 <Button
-                    android:id="@+id/btnReset"
+                    android:id="@+id/btnClear"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="2dp"
