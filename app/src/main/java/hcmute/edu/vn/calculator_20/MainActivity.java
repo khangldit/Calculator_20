@@ -11,36 +11,28 @@ import android.widget.Toast;
 import java.nio.DoubleBuffer;
 import java.text.DecimalFormat;
 
+import static java.lang.Math.pow;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnZero, btnOne,btnTwo,btnThree,btnFour,btnFive,btnSix,btnSeven,btnEight,btnNine,btnAdd,btnSub,btnMul,btnDiv,btnEqual,btnPoint,btnClear;
 
     private TextView txtMainCal, txtLog;
     private String sign;
-    private boolean flagEquals;
-    private boolean flagPoint;
-
-    private  double num1;
-    private double num2;
     private double rs;
+    private boolean newNumber;
+    private boolean formated;
+    private String txtNumber;
+    private boolean calculated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupButton();
-        initValue();
+        clear();
     }
 
-    private void initValue() {
-        num1 = Double.NaN;
-        num2= Double.NaN;
-        rs= Double.NaN;
-        flagEquals =false;
-        flagPoint =false;
-        sign="";
-        txtMainCal.setText("");
-    }
     private void setupButton()
     {
         btnZero =(Button) findViewById(R.id.btn0);
@@ -81,74 +73,159 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEqual.setOnClickListener(this);
         btnClear.setOnClickListener(this);
     }
-    @Override
-    public void onClick(View v) {
-        Button btn = (Button)v;
-        if (btn.getText().equals("=")){
-            if (sign.equals("")){
-                rs = Double.parseDouble(txtMainCal.getText().toString().trim());
-            }else {
-                num2 = Double.parseDouble(txtMainCal.getText().toString().trim());
-                if (sign.equals("+")){
-                    rs = num1+num2;
-                }else
-                if (sign.equals("-")){
-                    rs = num1-num2;
-                }else
-                if (sign.equals("*")){
-                    rs = num1*num2;
-                }else
-                if (sign.equals("/")){
-                    rs = num1/num2;
-                }
 
+    public void setError()
+    {
+        clear();
+        txtMainCal.setText("Overflow");
+    }
+    public void clear()
+    {
+        txtMainCal.setText("");
+        sign = "";
+        newNumber = true;
+        rs = 0;
+        formated = false;
+        txtNumber ="";
+        calculated = false;
+    }
+    public void equal()
+    {
+        if(!txtNumber.equals(""))
+        {
+            if(sign.equals("") && !formated)
+            {
+                rs = getNumber();
             }
-            txtMainCal.setText(new DecimalFormat("##.###").format(rs));
-            sign="";
-            flagEquals = true;
-        }else
-        if (btn.getText().equals(".")) {
-            if (!txtMainCal.getText().toString().contains(".")){
-                if (flagEquals)
-                    initValue();
-                txtMainCal.setText(txtMainCal.getText()+btn.getText().toString().trim());
+            else
+            {
+                calculate();
             }
-        }else
-        if (btn.getText().equals("C")){
-            initValue();
-        }else
-        if (btn.getText().equals("+")||
-                btn.getText().equals("-")||
-                btn.getText().equals("*")||
-                btn.getText().equals("/")){
-            if (flagEquals){
-                num1 = rs;
-                num2 = Double.NaN;
-                rs = Double.NaN;
-                sign = btn.getText().toString().trim();
-                txtMainCal.setText("");
-                flagEquals = false;
-            }else
-                if (txtMainCal.getText() !=""){
-                    if (sign == ""){
-                    num1 = Double.parseDouble(txtMainCal.getText().toString().trim());
-                    num2 = Double.NaN;
-                    sign = btn.getText().toString().trim();
-                    txtMainCal.setText("");
-                    }else{
-                        btnEqual.performClick();
-                        sign = btn.getText().toString().trim();
-                    }
-                }
-                else
-                    if(num1 != Double.NaN){
-                        sign = btn.getText().toString().trim();
-                    }
+            setResult();
         }
-        else{
-            if (flagEquals)
-                initValue();
-            txtMainCal.setText(txtMainCal.getText()+btn.getText().toString().trim());
-        } /////// number
+        newNumber = true;
+        sign = "";
+    }
+    public void setResult()
+    {
+        if(Double.isInfinite(rs))
+        {
+            setError();
+            return;
+        }
+        String temp = new DecimalFormat("##.##########").format(rs);
+        txtNumber = temp;
+        if(temp.contains(","))
+        {
+            if(temp.indexOf(',')>7)
+                temp = format(rs, temp.indexOf(','));
+            else if(temp.length()>9)
+            {
+                int x = temp.indexOf(',');
+                x = 8 - x;
+                String pattern = "##.";
+                for(int i = 0;i < x;i++)
+                    pattern = pattern + "#";
+                temp = new DecimalFormat(pattern).format(rs);
+            }
+        }
+        else if( temp.length() > 8)
+        {
+            temp = format(rs, temp.length());
+        }
+        txtMainCal.setText(temp);
+        formated = true;
+    }
+    public String format(double rs, int length)
+    {
+        rs = rs/ pow(10,length-1);
+        String temp = new DecimalFormat("#.#######").format(rs);
+        if( temp.equals("10"))
+        {
+            return "1e" + String.valueOf(length);
+        }
+        temp =temp+ "e"+ String.valueOf(length-1);
+        return temp;
+    }
+
+    public double getNumber()
+    {
+        if(txtNumber.contains("."))
+        {
+            txtNumber = "0" + txtNumber + "0";
+        }
+        return Double.parseDouble(txtNumber);
+    }
+    public void calculate()
+    {
+        double temp = getNumber();
+        if (sign.equals("+"))
+        {
+            rs = rs + temp;
+        }
+        else if (sign.equals("-"))
+        {
+            rs = rs - temp;
+        }
+        else if (sign.equals("*"))
+        {
+            rs = rs * temp;
+        }
+        else if (sign.equals("/"))
+        {
+            rs = rs / temp;
+        }
+
+    }
+    public void setupCalculate(String sign)
+    {
+        if(!txtMainCal.getText().equals(""))
+        {
+            newNumber = true;
+            this.sign = sign;
+        }
+    }
+    public void inputNumber(String number)
+    {
+        if(newNumber)
+        {
+            txtMainCal.setText(number);
+            txtNumber = number;
+            newNumber = false;
+        }
+        else
+        {
+            if(number.equals(".") && txtNumber.contains("."))
+                return;
+            txtNumber = txtNumber + number;
+            txtMainCal.setText(txtNumber);
+        }
+        formated = false;
+        calculated = false;
+    }
+    @Override
+    public void onClick(View v)
+    {
+        Button btn = (Button)v;
+        String txt = btn.getText().toString().trim();
+        if(txt.equals("C"))
+        {
+            clear();
+        }
+        else if(txt.equals("="))
+        {
+            equal();
+        }
+        else if(txt.equals("+") || txt.equals("-") || txt.equals("*") || txt.equals("/"))
+        {
+            if(!calculated)
+            {
+                equal();
+                calculated = true;
+            }
+            setupCalculate(txt);
+        }
+        else
+            inputNumber(txt);
     }
 }
