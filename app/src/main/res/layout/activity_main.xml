@@ -36,11 +36,15 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:autoSizeTextType="uniform"
+                    android:textSize="25pt"
+                    android:text="1,678e123"
                     android:background="#444"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:textColor="#FFF" />
+                    android:gravity="center_vertical"
+                    android:textAlignment="textEnd"
+                    android:textColor="#FFF"
+                    android:singleLine="true"
+                    android:ellipsize="start"
+                    />
 
             </LinearLayout>
         </TableRow>

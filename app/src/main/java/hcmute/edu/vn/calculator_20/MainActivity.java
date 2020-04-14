@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import java.nio.DoubleBuffer;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import static java.lang.Math.pow;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean formated;
     private String txtNumber;
     private boolean calculated;
+    DecimalFormatSymbols symbols;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         setupButton();
         clear();
+        symbols = new DecimalFormatSymbols(Locale.ENGLISH);
     }
 
     private void setupButton()
@@ -113,20 +117,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setError();
             return;
         }
-        String temp = new DecimalFormat("##.##########").format(rs);
+        String temp = new DecimalFormat("##.##########",symbols).format(rs);
         txtNumber = temp;
-        if(temp.contains(","))
+        if(temp.contains("."))
         {
-            if(temp.indexOf(',')>7)
-                temp = format(rs, temp.indexOf(','));
+            if(temp.indexOf('.')>7)
+                temp = format(rs, temp.indexOf('.'));
             else if(temp.length()>9)
             {
-                int x = temp.indexOf(',');
+                int x = temp.indexOf('.');
                 x = 8 - x;
                 String pattern = "##.";
                 for(int i = 0;i < x;i++)
                     pattern = pattern + "#";
-                temp = new DecimalFormat(pattern).format(rs);
+                temp = new DecimalFormat(pattern,symbols).format(rs);
             }
         }
         else if( temp.length() > 8)
@@ -139,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public String format(double rs, int length)
     {
         rs = rs/ pow(10,length-1);
-        String temp = new DecimalFormat("#.#######").format(rs);
+        String temp = new DecimalFormat("#.#######",symbols).format(rs);
         if( temp.equals("10"))
         {
             return "1e" + String.valueOf(length);
