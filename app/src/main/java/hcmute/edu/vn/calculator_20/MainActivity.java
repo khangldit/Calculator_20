@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.DoubleBuffer;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView txtMainCal, txtLog;
     private String sign;
-    private double rs;
+    private BigDecimal rs;
     private boolean newNumber;
     private boolean formated;
     private String txtNumber;
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtMainCal.setText("");
         sign = "";
         newNumber = true;
-        rs = 0;
+        rs = new BigDecimal("0");
         formated = false;
         txtNumber ="";
         calculated = false;
@@ -112,11 +114,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void setResult()
     {
-        if(Double.isInfinite(rs))
-        {
-            setError();
-            return;
-        }
+        //if(BigDecimal.(rs))
+//        {
+//            setError();
+//            return;
+//        }
         String temp = new DecimalFormat("##.##########",symbols).format(rs);
         txtNumber = temp;
         if(temp.contains("."))
@@ -140,9 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtMainCal.setText(temp);
         formated = true;
     }
-    public String format(double rs, int length)
+    public String format(BigDecimal rs, int length)
     {
-        rs = rs/ pow(10,length-1);
+        rs = rs.divide(new BigDecimal(pow(10,length-1)),20, RoundingMode.CEILING);
         String temp = new DecimalFormat("#.#######",symbols).format(rs);
         if( temp.equals("10"))
         {
@@ -152,32 +154,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return temp;
     }
 
-    public double getNumber()
+    public BigDecimal getNumber()
     {
         if(txtNumber.contains("."))
         {
             txtNumber = "0" + txtNumber + "0";
         }
-        return Double.parseDouble(txtNumber);
+        return new BigDecimal(txtNumber);
     }
     public void calculate()
     {
-        double temp = getNumber();
+        BigDecimal temp = getNumber();
         if (sign.equals("+"))
         {
-            rs = rs + temp;
+            rs = rs.add(temp);
         }
         else if (sign.equals("-"))
         {
-            rs = rs - temp;
+            rs = rs.subtract(temp);
         }
         else if (sign.equals("*"))
         {
-            rs = rs * temp;
+            rs = rs.multiply(temp);
         }
         else if (sign.equals("/"))
         {
-            rs = rs / temp;
+            rs = rs.divide(temp,20, RoundingMode.CEILING);
         }
 
     }
