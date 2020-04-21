@@ -97,28 +97,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void equal()
     {
-        if(!txtNumber.equals(""))
+        try
         {
-            if(sign.equals("") && !formated)
+            if(!txtNumber.equals(""))
             {
-                rs = getNumber();
+                if(sign.equals("") && !formated)
+                {
+                    rs = getNumber();
+                }
+                else
+                {
+                    calculate();
+                }
+                setResult();
             }
-            else
-            {
-                calculate();
-            }
-            setResult();
+            newNumber = true;
+            sign = "";
         }
-        newNumber = true;
-        sign = "";
+        catch (Exception e)
+        {
+            setError();
+        }
+
     }
     public void setResult()
     {
-        //if(BigDecimal.(rs))
-//        {
-//            setError();
-//            return;
-//        }
         String temp = new DecimalFormat("##.##########",symbols).format(rs);
         txtNumber = temp;
         if(temp.contains("."))
